@@ -68,9 +68,8 @@ Route::middleware('auth:api')->group(function(){
     //inventory
     Route::post('/inventory', [InventoryController::class, 'add']);
     Route::get('/inventory', [InventoryController::class, 'getAll']);
-    Route::get('/inventory/{id}', [InventoryController::class, 'getOne']);
     Route::get('/inventory/{group}', [InventoryController::class, 'getGroup']);
-    Route::put('/inventory', [InventoryController::class, 'update']);
+    Route::put('/inventory/{id}', [InventoryController::class, 'update']);
     Route::delete('inventory/{id}', [InventoryController::class, 'delete']);
 
     //projects

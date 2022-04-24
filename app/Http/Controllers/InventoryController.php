@@ -71,4 +71,76 @@ class InventoryController extends Controller
 
         return $array;
     }
+
+
+    public function getAll(){
+        $array = ['error' => ''];
+
+        $all = Inventory::all();
+        if($all){
+            $array['inventory'] = $all;
+        }else{
+            $array['error'] = 'Não há produtos cadastrados no estoque.';
+        }
+
+        return $array;
+    }
+
+    public function update($id, Request $request){
+        $array = ['error' => ''];
+
+        $pdtInvetory = Inventory::find($id);
+
+
+        $validator= Validator::make($request->all(),[
+            'quantaty'=>'integer'
+        ]);
+        if($pdtInvetory){
+            $pdtInvetory = Inventory::where('id', $id)->get();
+            $pdtInvetory = $pdtInvetory[0];
+            if(!$validator->fails()){
+                $quantaty = intval($request->input('quantaty'));
+                $description = $request->input('description');
+                $type = intval($request->input('type'));
+
+                if($quantaty || $description || $type){
+                    if($quantaty){
+                        $pdtInvetory->quantaty = $quantaty;
+                    }
+                    if($description){
+                        $pdtInvetory->description = $description;
+                    }
+                    if($type){
+                        $pdtInvetory->id_inventoryTypes = $type;
+                    }
+                    $pdtInvetory->save();
+                    $array['product'] = $pdtInvetory;
+
+                }else{
+                    $array['error'] = 'Não houve alteraçoes';
+                    $array['product'] = $pdtInvetory;
+                }
+            }else{
+                $array['error'] = $validator->errors()->first;
+            }
+        }else{
+            $array['error'] = 'Produto não encontrado';
+        }
+        return $array;
+    }
+
+    public function delete($id){
+        $array = ['error'=>''];
+
+        $pdtInvetory = Inventory::find($id);
+
+        if($pdtInvetory){
+            $pdtInvetory->delete();
+            $array['error'] = 'deletado com sucesso';
+        }else{
+            $array['error'] = 'Produto não encontrado';
+        }
+
+        return $array;
+    }
 }
