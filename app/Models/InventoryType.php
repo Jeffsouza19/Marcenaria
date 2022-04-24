@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class InventoryType extends Model
 {
     use HasFactory;
+    protected $table = 'inventorytypes';
+    public $timestamps = false;
 }
